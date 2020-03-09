@@ -91,7 +91,7 @@ CREATE OR REPLACE FOREIGN STREAM "hive_edr_data"
     "sn_volume_amt_ip_bytes_downlink" INTEGER,
     "sn_volume_amt_ip_bytes_uplink" INTEGER,
     "sn_closure_reason" INTEGER,
-    "event_label" VARCHAR(16).
+    "event_label" VARCHAR(16),
     "aa_sn_end_time" VARCHAR(32),
     "aa_sn_start_time" VARCHAR(32),
     "aa_bearer_3gpp_imei" VARCHAR(32),
@@ -251,11 +251,11 @@ INSERT INTO "hive_edr_data"
 )
 SELECT STREAM 
     -- partition by columns
-    extract("event_time",MINUTE)/15
-    extract("event_time",HOUR),
-    extract("event_time",DAY),
-    extract("event_time",MONTH),
-    extract("event_time",YEAR),
+    (extract(MINUTE from "event_time")/15)*15,
+    extract(HOUR from "event_time"),
+    extract(DAY from "event_time"),
+    extract(MONTH from "event_time"),
+    extract(YEAR from "event_time"),
     "app_id",
     "cell_id",
     -- data columns

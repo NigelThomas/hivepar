@@ -55,7 +55,7 @@ OPTIONS (
 CREATE OR REPLACE VIEW "edr_data_step_1" 
 AS
 SELECT STREAM
-     "sn_end_time"+"secs_offet" as "event_time"
+     char_to_timestamp('MM/dd/yyyy HH:mm:ss:SSS', "sn-end-time") as "event_time"
     , *
 FROM "edr_data_fs";
 

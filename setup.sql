@@ -251,11 +251,11 @@ INSERT INTO "hive_edr_data"
 )
 SELECT STREAM 
     -- partition by columns
-    (extract(MINUTE from "event_time")/15)*15,
-    extract(HOUR from "event_time"),
-    extract(DAY from "event_time"),
-    extract(MONTH from "event_time"),
-    extract(YEAR from "event_time"),
+    CAST((extract(MINUTE from "event_time")/15)*15 AS INTEGER),
+    CAST(extract(HOUR from "event_time") AS INTEGER),
+    CAST(extract(DAY from "event_time") AS INTEGER),
+    CAST(extract(MONTH from "event_time") AS INTEGER),
+    CAST(extract(YEAR from "event_time") AS INTEGER),
     "app_id",
     "cell_id",
     -- data columns

@@ -13,26 +13,26 @@ fi
     
 for p in `seq -w 1 $1`
 do
-    export CONTAINER_NAME=hiveperf$p
+    export CONTAINER_NAME=hivepar$p
     if [ "${HOST_OUTPUT_STYLE}" = "mounted volume" ]
     then
         # we are going to use the local file system for temp output files
         export HOST_OUTPUT_DIR=`pwd`/${CONTAINER_NAME}
     fi
     echo "starting $CONTAINER_NAME" 
-    ./hiveperf.sh
+    ./hivepar.sh
 done
 
 cd $tdir
 
-echo "hiveperf-parallel with $1 containers started at `date` using ${HOST_OUTPUT_STYLE} logging to $tdir" | tee > summary.txt
+echo "hivepar-parallel with $1 containers started at `date` using ${HOST_OUTPUT_STYLE} logging to $tdir" | tee > summary.txt
 
 # stats every 15 secs for 25 minutes with timestamp and wide format
 vmstat -t -w 15 100 | tee vmstat.log
 
 for p in `seq -w 1 $1`
 do
-    export CONTAINER_NAME=hiveperf$p
+    export CONTAINER_NAME=hivepar$p
     # collect trace log and stream stats
     docker cp ${CONTAINER_NAME}:/var/log/sqlstream/Trace.log.0 ${CONTAINER_NAME}.trace.log
 

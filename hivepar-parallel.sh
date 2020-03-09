@@ -1,4 +1,4 @@
-tdir=test-`date +"%Y.%m.%d-%H.%M"`
+tdir=hivepar-test-`date +"%Y.%m.%d-%H.%M"`
 mkdir $tdir
 
 if [ -n "$2" ]

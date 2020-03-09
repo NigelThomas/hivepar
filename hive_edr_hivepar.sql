@@ -78,7 +78,7 @@ CREATE TABLE hive_edr_hivepar
     bb_sn_volume_amt_ip_bytes_downlink INT,
     bb_sn_volume_amt_ip_bytes_uplink INT,
     bb_sn_closure_reason INT,
-    bb_event_label VARCHAR(16),
+    bb_event_label VARCHAR(16)
 )
 PARTITIONED BY (
     min INT,

@@ -14,7 +14,7 @@ OPTIONS
 , "SEPARATOR" ','
 , "SKIP_HEADER" 'true'
 , "DIRECTORY" '/home/sqlstream/shards'
-, "FILENAME_PATTERN" 'shards.csv',
+, "FILENAME_PATTERN" 'shards.csv'
 );
 
 CREATE OR REPLACE FOREIGN STREAM "edr_data_fs"

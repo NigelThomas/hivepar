@@ -2,6 +2,21 @@ CREATE OR REPLACE SCHEMA "hivepar";
 SET SCHEMA '"hivepar"';
 
 
+CREATE OR REPLACE FOREIGN TABLE "edr_shards" 
+( "app_id" INTEGER
+, "cell_id" INTEGER
+)
+SERVER FILE_SERVER
+OPTIONS
+( "PARSER" 'CSV'
+, "CHARACTER_ENCODING" 'UTF-8'
+, "QUOTE_CHARACTER" '"'
+, "SEPARATOR" ','
+, "SKIP_HEADER" 'true'
+, "DIRECTORY" '/home/sqlstream/shards'
+, "FILENAME_PATTERN" 'shards.csv',
+);
+
 CREATE OR REPLACE FOREIGN STREAM "edr_data_fs"
 (
     "secs_offset" INTEGER,
@@ -38,7 +53,7 @@ OPTIONS (
         "SEPARATOR" ',',
         "SKIP_HEADER" 'false',                          -- headers stripped from files because of bug with REPEAT
 
-        "DIRECTORY" '/home/sqlstream/hivepar/edr',
+        "DIRECTORY" '/home/sqlstream/edr',
         "FILENAME_PATTERN" '.*REPORTOCS.*\.csv',
 
                                                         -- the sample data set is 600k rows; this expands that to 60M rows and can be changed to 'FOREVER' if needed
@@ -49,15 +64,18 @@ OPTIONS (
 
 
 
--- manipulate sn_end_time by adding the random secs_offset
--- add in app_id and cell_id
+-- TODO: manipulate sn_end_time by adding the random secs_offset
+
+-- Filter out any shards we aren't interested in
 
 CREATE OR REPLACE VIEW "edr_data_step_1" 
 AS
 SELECT STREAM
      char_to_timestamp('MM/dd/yyyy HH:mm:ss:SSS', "sn-end-time") as "event_time"
     , *
-FROM "edr_data_fs";
+FROM "edr_data_fs"
+JOIN "edr_shards" USING("app_id","cell_id")
+;
 
 -- Note columns are lower-cased and hyphens and spaces turned to underscores
 -- FILE_ROTATION_ROWCOUNT used to force file output

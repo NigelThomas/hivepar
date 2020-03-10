@@ -41,11 +41,14 @@ else
     HOST_OUTPUT_MOUNT=
 fi
 
+# HOST_EDR_MOUNT points to the data for this container - allows us to have different containers seeing different data if wanted
 
 # override default host mount point for credentials using HOST_CRED_MOUNT
 
 docker run $HOST_JNDI_MOUNT $HOST_OUTPUT_MOUNT \
            -v ${HOST_CRED_MOUNT:=$HOME/credentials}:/home/sqlstream/credentials \
+           -v ${HOST_EDR_MOUNT:=$HOME/edr}:/home/sqlstream/edr \
+           -v ${HOST_SHARD_MOUNT:=$HOME/shards}:/home/sqlstream/shards \
            -e GIT_ACCOUNT=$GIT_ACCOUNT -e GIT_PROJECT_NAME=$GIT_PROJECT_NAME -e GIT_PROJECT_HASH=$GIT_PROJECT_HASH \
            -e LOAD_SLAB_FILES="${LOAD_SLAB_FILES:=}" \
            -e SQLSTREAM_HEAP_MEMORY=${SQLSTREAM_HEAP_MEMORY:=4096m} \

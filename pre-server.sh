@@ -7,7 +7,8 @@
 cat >> /var/log/sqlstream/Trace.properties <<!END
 com.sqlstream.aspen.namespace.hive.level=FINE 
 com.sqlstream.aspen.namespace.hdfs.level=FINE 
-com.sqlstream.aspen.namespace.orc.level=FINE
+com.sqlstream.aspen.namespace.orc.ORCFormatter.level=FINE
+com.sqlstream.aspen.namespace.file.level=FINE
 !END
 
 # assume credentials are mounted at /home/sqlstream/credentials

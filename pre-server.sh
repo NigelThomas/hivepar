@@ -4,6 +4,12 @@
 
 . /etc/sqlstream/environment
 
+cat >> /var/log/sqlstream/Trace.properties <<!END
+com.sqlstream.aspen.namespace.hive.Level=FINE 
+com.sqlstream.aspen.namespace.hdfs.Level=FINE 
+com.sqlstream.aspen.namespace.orc.Level=FINE
+!END
+
 # assume credentials are mounted at /home/sqlstream/credentials
 CRED=/home/sqlstream/credentials
 

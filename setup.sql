@@ -74,7 +74,7 @@ SELECT STREAM
      char_to_timestamp('MM/dd/yyyy HH:mm:ss:SSS', "sn-end-time") as "event_time"
     , *
 FROM "edr_data_fs"
-JOIN "edr_shards" USING("app_id","cell_id")
+---JOIN "edr_shards" USING("app_id","cell_id")
 ;
 
 -- Note columns are lower-cased and hyphens and spaces turned to underscores

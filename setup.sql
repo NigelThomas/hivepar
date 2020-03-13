@@ -170,7 +170,7 @@ OPTIONS (
         "FILENAME_DATE_FORMAT" 'yyyy-MM-dd-HH.mm.ss',
         
         
-        "FILE_ROTATION_TIME" '60s',   -- force frequent file rotations
+        "FILE_ROTATION_TIME" '%FILE_ROTATION_TIME%',   -- force frequent file rotations
         "ORIGINAL_FILENAME" 'pending-edr.orc',
 
         

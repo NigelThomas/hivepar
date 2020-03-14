@@ -28,12 +28,22 @@ This is managed by the bootstrap utilities present on the docker image `sqlstrea
 
 ## Starting the processing
 
-For a single processor use the `hivepar.sh` script. This will start a container with the name `hivepar` - the container name can also be set externally:
+For a single processor use the `hivepar.sh` script. This will start a container with the name `hivepar` 
+
+## Parameterizing startup
+There are some parameters you can pass in bu setting environment variables before calling the scripts. For example:
 
 ```
-export CONTAINER_NAME=myspecialname
 ./hivepar.sh
 ```
+
+* `export BASE_IMAGE_LABEL=6.0.1.19705` - sets the specific version of the `sqlstream/streamlab-git` image to be used (default is `release`
+* `export SQLSTREAM_HEAP_MEMORY=8g` - sets the heap memory size for s-Server (default is 4096m)
+* `export SQLSTREAM_DISABLE_PUMPS=Y` - setting this to any non-zero-string value results in the image starting, but the pumps remaining stopped. This can be helpful if you want to install a new version of an adapter before starting the test
+* `export SQLSTREAM_SLEEP_SECS=10` - set an extra sleep period before attempting to connect to s-Server
+* `export CONTAINER_NAME=myspecialname` - change the container name (default is `hivepar`)
+
+## Starting multiple containers in parallel
 
 To start multiple containers in parallel, use `hivepar-parallel.sh <n>` This will start n containers in parallel. The container names will be hivepar1,hivepar2,...,hiveparn. If more than 10 containers are started the names will be hivepar01, hivepar02, etc up to hivepar99; and in the unlikely event that you start more than 100 processors names will start from hivepar001.
 
@@ -112,4 +122,5 @@ $SQLSTREAM_HOME/bin/sqllineClient --run=startPumps.sql
 
 $SQLSTREAM_HOME/bin/sqllineClient --run=stopPumps.sql
 ```
+
 

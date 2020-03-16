@@ -62,7 +62,41 @@ OPTIONS (
 
 );
 
+-- intermediate stream
 
+CREATE OR REPLACE STREAM "edr_data_ns"
+(
+    "secs_offset" INTEGER,
+    "app_id" INTEGER,
+    "cell_id" INTEGER,
+    "sn-end-time" VARCHAR(32),
+    "sn-start-time" VARCHAR(32),
+    "bearer-3gpp imei" VARCHAR(32),
+    "bearer-3gpp imsi" BIGINT,
+    "bearer-3gpp rat-type" INTEGER,
+    "bearer-3gpp user-location-information" VARCHAR(32),
+    "ip-server-ip-address" VARCHAR(16),
+    "ip-subscriber-ip-address" VARCHAR(64),
+    "p2p-tls-sni" VARCHAR(128),
+    "radius-calling-station-id" BIGINT,
+    "sn-direction" VARCHAR(16),
+    "sn-duration" INTEGER,
+    "sn-flow-end-time" VARCHAR(32),
+    "sn-flow-id" VARCHAR(32),
+    "sn-flow-start-time" VARCHAR(32),
+    "sn-server-port" INTEGER,
+    "sn-subscriber-port" INTEGER,
+    "sn-volume-amt-ip-bytes-downlink" INTEGER,
+    "sn-volume-amt-ip-bytes-uplink" INTEGER,
+    "sn-closure-reason" INTEGER,
+    "event-label" VARCHAR(16)
+)
+;
+
+CREATE OR REPLACE PUMP "edr_data_source_pump" STOPPED
+AS
+INSERT INTO "edr_data_ns"
+SELECT STREAM * FROM "edr_data_fs";
 
 -- TODO: manipulate sn_end_time by adding the random secs_offset
 
@@ -73,7 +107,7 @@ AS
 SELECT STREAM
      char_to_timestamp('MM/dd/yyyy HH:mm:ss:SSS', "sn-end-time") as "event_time"
     , *
-FROM "edr_data_fs"
+FROM "edr_data_ns"
 ---JOIN "edr_shards" USING("app_id","cell_id")
 ;
 

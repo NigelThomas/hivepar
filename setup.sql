@@ -172,7 +172,7 @@ OPTIONS (
         
         "FILE_ROTATION_TIME" '%FILE_ROTATION_TIME%',   -- force frequent file rotations
         "ORIGINAL_FILENAME" 'pending-edr.orc',
-
+        "HDFS_OUTPUT_DIR" '/data/svc_sqlstream_guavus/hivepar_edr', -- can we use this
         
         "HIVE_SCHEMA_NAME" 'hivepar',
         "HIVE_TABLE_NAME" 'hive_edr_hivepar',

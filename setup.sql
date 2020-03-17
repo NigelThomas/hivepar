@@ -393,7 +393,7 @@ OPTIONS (
         "ROW_SEPARATOR" u&'\000A',
         "SEPARATOR" ',',
         "WRITE_HEADER" 'false',
-        "DIRECTORY" '/home/sqlstream/metrics/',
+        "DIRECTORY" '/home/sqlstream/metrics',
         "ORIGINAL_FILENAME" 'input-temp.csv',
         "FILENAME_PREFIX" 'input-',
         "FILENAME_SUFFIX" '.csv',
@@ -408,10 +408,10 @@ AS
 INSERT INTO "metrics_in"
 (KAFKA_TIMESTAMP, KAFKA_PARTITION, RECORD_COUNT)
 SELECT STREAM
-    STEP(s.ROWTIME BY '30' SECOND) 
+    STEP(s.ROWTIME BY INTERVAL '30' SECOND) 
 ,   SQLSTREAM_PROV_KAFKA_PARTITION
 ,   COUNT(*)
 FROM "edr_data_ns"
-GROUP BY STEP(s.ROWTIME BY '30' SECOND)
+GROUP BY STEP(s.ROWTIME BY INTERVAL '30' SECOND)
 ,   SQLSTREAM_PROV_KAFKA_PARTITION
 ;

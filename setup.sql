@@ -378,3 +378,40 @@ SELECT STREAM
     "event-label"
 FROM "edr_data_step_1";
 
+
+-- metrics driven from input stream
+
+CREATE OR REPLACE FOREIGN STREAM "metrics_in"
+( KAFKA_TIMESTAMP TIMESTAMP
+, KAFKA_PARTITION INTEGER
+, RECORD_COUNT BIGINT
+)
+SERVER "FILE_SERVER"
+OPTIONS (
+        "FORMATTER" 'CSV',
+        "CHARACTER_ENCODING" 'UTF-8',
+        "ROW_SEPARATOR" u&'\000A',
+        "SEPARATOR" ',',
+        "WRITE_HEADER" 'false',
+        "DIRECTORY" '/home/sqlstream/metrics/',
+        "ORIGINAL_FILENAME" 'input-temp.csv',
+        "FILENAME_PREFIX" 'input-',
+        "FILENAME_SUFFIX" '.csv',
+        "FILENAME_DATE_FORMAT" 'yyyy-MM-dd-HH',
+        "FILE_ROTATION_TIME" '1d',
+        "FORMATTER_INCLUDE_ROWTIME" 'false'
+    );
+
+
+CREATE OR REPLACE PUMP "metrics_in_pump" stopped
+AS 
+INSERT INTO "metrics_in"
+(KAFKA_TIMESTAMP, KAFKA_PARTITION, RECORD_COUNT)
+SELECT STREAM
+    STEP(s.ROWTIME BY '30' SECOND) 
+,   SQLSTREAM_PROV_KAFKA_PARTITION
+,   COUNT(*)
+FROM "edr_data_ns"
+GROUP BY STEP(s.ROWTIME BY '30' SECOND)
+,   SQLSTREAM_PROV_KAFKA_PARTITION
+;
